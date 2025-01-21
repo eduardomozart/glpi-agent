@@ -77,6 +77,27 @@ sub getModel {
     return $model;
 }
 
+sub fixPortsType {
+    my ($self) = @_;
+
+    my $device = $self->device
+        or return;
+
+    # Get list of device ports
+    my $ports = $device->{PORTS}->{PORT};
+    
+    foreach my $port (keys(%$ports)) {
+        my $ifdescr = $device->{PORTS}->{PORT}->{$port}->{IFDESCR};
+        next unless defined($ifdescr);
+        my $iftype = $device->{PORTS}->{PORT}->{$port}->{IFTYPE};
+        
+        # If Wireless port (IEEE802.11) identified as Ethernet port
+        if ($ifdescr =~ /w\z/ && $iftype eq 7) {
+            $device->{PORTS}->{PORT}->{$port}->{IFTYPE} = 71;
+        }
+    }
+}
+
 sub run {
     my ($self) = @_;
 
@@ -92,6 +113,8 @@ sub run {
             or next;
         $device->{PAGECOUNTERS}->{$counter} = $count;
     }
+
+    $self->fixPortsType();
 }
 
 1;
