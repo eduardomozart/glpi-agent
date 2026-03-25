@@ -86,7 +86,7 @@ sub run {
         # Also handles VLAN sub-interfaces such as wifi1ap5.620 created
         # when a RADIUS server assigns a dynamic VLAN via 802.1X.
         my $ifdescr = $device->{PORTS}->{PORT}->{$port}->{IFDESCR};
-        next unless defined($ifdescr) && $ifdescr =~ /^(?:rai?|wifi\d+ap)\d+(?:\.\d+)?$/;
+        next unless defined($ifdescr) && $ifdescr =~ /^(?:ra\d+|rai\d+|wifi\d+ap\d+)(?:\.\d+)?$/;
 
         # Replaces the port iftype from "Ethernet" (6) to "WiFi" (71)
         # UBNT APs erroneously classify WiFi interfaces as Ethernet in SNMP
