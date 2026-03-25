@@ -80,7 +80,7 @@ sub run {
     # $unifiVapEssidValues->{0} = <SSID>
 
     # UBNT-UniFi-MIB (for MediaTek-based devices with ra/rai interfaces
-    # and Atheros-based devices with wifi0apX/wifi1apX interfaces)
+    # and Atheros-based devices with wifi0apX/wifi1apX interfaces).
     foreach my $port (keys(%$ports)) {
         # For each device Radio port (raX, raiX, wifi0apX, wifi1apX etc.)
         # Also handles VLAN sub-interfaces such as wifi1ap5.620 created
