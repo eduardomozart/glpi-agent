@@ -7,6 +7,7 @@ use lib 't/lib';
 use Test::Deep;
 use Test::More;
 use Test::NoWarnings;
+use Test::Exception;
 
 use GLPI::Agent::Task::Inventory::Linux::Networks;
 use GLPI::Agent::Inventory;
@@ -36,7 +37,6 @@ foreach my $test (keys %tests) {
 my $linux_net = Test::MockModule->new('GLPI::Agent::Task::Inventory::Linux::Networks');
 $linux_net->mock('_getInterfacesBase', sub { return ({ DESCRIPTION => 'eth0' }); });
 
-my $orig_getAllLines = $linux_net->original('getAllLines');
 $linux_net->mock('getAllLines', sub {
     my (%params) = @_;
     if ($params{file} && $params{file} eq '/proc/net/dev') {
@@ -46,7 +46,7 @@ $linux_net->mock('getAllLines', sub {
             '  eth0: 1234567   12345    1    0    0     0          0         0 8765432   87654    2    0    0     0       0          0'
         );
     }
-    return $orig_getAllLines->(@_);
+    return $linux_net->original('getAllLines')->(@_);
 });
 
 my @interfaces = GLPI::Agent::Task::Inventory::Linux::Networks::_getInterfaces(glpi12_support => 1);
